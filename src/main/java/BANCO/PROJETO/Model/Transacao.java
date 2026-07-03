@@ -1,5 +1,6 @@
 package BANCO.PROJETO.Model;
 
+import BANCO.PROJETO.Enum.SituacaoPix;
 import BANCO.PROJETO.Enum.TipoTransacao;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -15,6 +17,28 @@ import java.util.UUID;
 @Table(name = "Transacao")
 
 public class Transacao {
+
+    public Transacao() {
+
+    }
+    public Transacao(String cpfOrigem,
+                     String nomeOrigem,
+                     String cpfDestino,
+                     String nomeDestino,
+                     BigDecimal valor,
+                     LocalDateTime dataHora,
+                     SituacaoPix situacaoPix,
+                     TipoTransacao tipoTransacao) {
+
+
+        this.cpfOrigem = cpfOrigem;
+        this.nomeOrigem = nomeOrigem;
+        this.cpfDestino = cpfDestino;
+        this.nomeDestino = nomeDestino;
+        this.valor = valor;
+        this.dataHora = dataHora;
+        this.situacaoPix = situacaoPix;
+        this.tipoTransacao = tipoTransacao; }
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -27,10 +51,22 @@ public class Transacao {
     private TipoTransacao tipoTransacao;
 
     @Column(nullable = false)
-    private LocalDate dataHora;
+    private LocalDateTime dataHora;
 
     @Column(nullable = false, length = 14)
-    private String NumeroContaOrigem;
+    private String numeroContaOrigem;
     @Column(nullable = false, length = 14)
-    private String NumeroContaDestino;
+    private String numeroContaDestino;
+
+    @Enumerated(EnumType.STRING)
+    private SituacaoPix situacaoPix;
+
+    @Column(nullable = false, length = 14)
+   private String cpfOrigem;
+    @Column(nullable = false, length = 14)
+   private String nomeOrigem;
+    @Column(nullable = false, length = 14)
+   private String cpfDestino;
+    @Column(nullable = false, length = 14)
+   private String nomeDestino;
 }

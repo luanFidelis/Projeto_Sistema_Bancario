@@ -1,10 +1,15 @@
 package BANCO.PROJETO.Service;
 
 import BANCO.PROJETO.Dto.TransacaoDto;
+import BANCO.PROJETO.Enum.SituacaoPix;
+import BANCO.PROJETO.Enum.TipoTransacao;
+import BANCO.PROJETO.Exception.Excepitons.AcaoNaoRealizada;
 import BANCO.PROJETO.Exception.Excepitons.ContaNaoEncontradaExcepiton;
 import BANCO.PROJETO.Exception.Excepitons.SaldoInsuficienteException;
 import BANCO.PROJETO.Exception.Excepitons.ValorInvalidoException;
 import BANCO.PROJETO.Model.Conta;
+import BANCO.PROJETO.Model.HistoricoMovimentacao;
+
 import BANCO.PROJETO.Model.Transacao;
 import BANCO.PROJETO.Repository.ChavePixRepository;
 import BANCO.PROJETO.Repository.ContaRepository;
@@ -14,6 +19,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 
 @Service
@@ -35,49 +41,80 @@ public class TransacaoService {
     @Transactional
     public void fazerTransacaoPix(TransacaoDto transacaoDto) {
 
-        Conta contaQueVaiEnviarPix = contaRepository.findByNumeroConta(transacaoDto.numeroContaOrigem())
+        Conta contaQueVaiEnviar = contaRepository.findByNumeroConta(transacaoDto.numeroContaOrigem())
                 .orElseThrow(() -> new ContaNaoEncontradaExcepiton("Conta Origem não encontrada"));
 
 
-        Conta contaQueVaiReceberPix = contaRepository.findByNumeroConta(transacaoDto.numeroContaDestino())
+        Conta contaQueVaiReceber = contaRepository.findByNumeroConta(transacaoDto.numeroContaDestino())
                 .orElseThrow(() -> new ContaNaoEncontradaExcepiton("Conta Destino não encontrada"));
 
 
-        if(contaQueVaiEnviarPix.getSaldo().compareTo(transacaoDto.valor()) < 0)
+        String numeroGerado = gerarNumeroProcesso();
+
+        if(contaQueVaiEnviar.getSaldo().compareTo(transacaoDto.valor()) < 0)
             throw new SaldoInsuficienteException("Saldo insuficiente");
 
         if(transacaoDto.valor().compareTo(BigDecimal.ZERO) <= 0)
             throw new ValorInvalidoException("Valor insuficiente");
 
+        boolean retorno = false;
+        LocalDateTime horaTransacao = LocalDateTime.now();
         switch (transacaoDto.tipoTransacao()) {
-            case PIX -> fazerPix(contaQueVaiEnviarPix, contaQueVaiReceberPix, transacaoDto.valor());
+            case PIX : retorno = fazerPix(contaQueVaiEnviar, contaQueVaiReceber, transacaoDto.valor());
+            break;
+            case CREDITO:
+            break;
+            case DEBITO:
+                break;
 
+            default: throw new AcaoNaoRealizada("Metodo pix não encontrado, entre em contato com o suporte");
         }
-        String numeroProcesso;
-        do {
-             numeroProcesso = "NP-" + System.currentTimeMillis();
 
-        } while (chavePixRepository.numeroProcessoExiste(numeroProcesso));
+        if(!retorno){
+            throw new AcaoNaoRealizada("Ação nao realizada, entre em contado com o suporte");
+        }
 
+
+        Transacao transacao = new Transacao(
+                contaQueVaiEnviar.getUsuario().getCpf(),
+                contaQueVaiEnviar.getUsuario().getNome(),
+                contaQueVaiReceber.getUsuario().getCpf(),
+                contaQueVaiReceber.getUsuario().getNome(),
+                transacaoDto.valor(),
+                horaTransacao,
+                SituacaoPix.APROVADO,
+                transacaoDto.tipoTransacao()
+
+                );
+        transacaoRepository.save(transacao);
+
+        HistoricoMovimentacao historicoMovimentacao = new HistoricoMovimentacao(contaQueVaiEnviar.getNumeroConta(), contaQueVaiReceber.getNumeroConta(),horaTransacao, SituacaoPix.APROVADO, numeroGerado);
 
 
     }
 
-    private void fazerPix(Conta contaOrigem, Conta contaDestino, BigDecimal valor) {
+    private boolean fazerPix(Conta contaOrigem, Conta contaDestino, BigDecimal valor) {
 
-        contaOrigem.setSaldo(
-                contaOrigem.getSaldo().subtract(valor)
-        );
-
-        contaDestino.setSaldo(
-                contaDestino.getSaldo().add(valor)
-        );
+        contaOrigem.setSaldo(contaOrigem.getSaldo().subtract(valor));
+        contaDestino.setSaldo(contaDestino.getSaldo().add(valor));
 
 
         contaRepository.save(contaOrigem);
         contaRepository.save(contaDestino);
+        return true;
+
+    }
+
+    private String gerarNumeroProcesso() {
+
+        String numeroProcesso;
+        do {
+            numeroProcesso = "NP-" + System.currentTimeMillis();
+
+        } while (chavePixRepository.numeroProcessoExiste(numeroProcesso));
 
 
+        return numeroProcesso;
     }
 
 }

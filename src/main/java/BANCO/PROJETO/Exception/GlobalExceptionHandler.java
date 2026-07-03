@@ -1,8 +1,7 @@
 package BANCO.PROJETO.Exception;
 
-import BANCO.PROJETO.Exception.Excepitons.ContaNaoEncontradaExcepiton;
-import BANCO.PROJETO.Exception.Excepitons.SaldoInsuficienteException;
-import BANCO.PROJETO.Exception.Excepitons.ValorInvalidoException;
+import BANCO.PROJETO.Exception.Excepitons.*;
+import BANCO.PROJETO.Model.Usuario;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -29,7 +28,20 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> valorInvalido(ValorInvalidoException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
+    @ExceptionHandler(AcaoNaoRealizada.class)
+    public ResponseEntity<String> acaoNaoConcluida(AcaoNaoRealizada ex){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+
     }
+
+    @ExceptionHandler(UsuarioExistenteException.class)
+    public ResponseEntity<String> usuarioExistente(Usuario usuario) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(usuario.getCpf());
+    }
+
+
+}
 
 
 
