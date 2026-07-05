@@ -9,5 +9,5 @@ import java.util.UUID;
 @Repository
 public interface ChavePixRepository extends JpaRepository<ChavePix, UUID> {
 
-boolean numeroProcessoExiste(String numeroProcesso);
+boolean existsByNumeroProcesso(String numeroProcesso);
 }

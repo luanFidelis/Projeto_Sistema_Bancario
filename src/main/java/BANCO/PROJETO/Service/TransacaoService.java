@@ -111,7 +111,7 @@ public class TransacaoService {
         do {
             numeroProcesso = "NP-" + System.currentTimeMillis();
 
-        } while (chavePixRepository.numeroProcessoExiste(numeroProcesso));
+        } while (chavePixRepository.existsByNumeroProcesso(numeroProcesso));
 
 
         return numeroProcesso;

@@ -25,16 +25,18 @@ public class UsuarioService {
 
     }
 
-    public Usuario registrarConta( Usuario usuario ) {
+    public Optional<Usuario> registrarConta( Usuario usuario ) {
 
         if (usuarioRepository.findByCpf(usuario.getCpf()).isPresent()) {
             throw new UsuarioExistenteException("Cpf ja registrado!");
         }
 
-        return usuarioRepository.save(usuario);
+        return Optional.of(usuarioRepository.save(usuario));
     }
 
-    public Optional<> buscarContaPorCpf(String cpf) {}
+    public Optional<Usuario> buscarContaPorCpf(String cpf) {
+        return usuarioRepository.findByCpf(cpf);
+    }
 
 
 

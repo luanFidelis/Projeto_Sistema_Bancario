@@ -49,7 +49,7 @@ this.cpf = cpf;
     @Enumerated(EnumType.STRING)
     private TipoDeConta tipoDeconta;
 
-    @OneToMany(mappedBy = "usuario",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
     private Conta conta;
 
 

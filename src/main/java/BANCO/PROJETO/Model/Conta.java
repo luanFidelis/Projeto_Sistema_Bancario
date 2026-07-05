@@ -40,7 +40,7 @@ private TipoDeConta tipoDeConta;
 @OneToMany(mappedBy = "conta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 private List<ChavePix> chavePix =  new ArrayList<>();
 
-@ManyToMany(fetch = FetchType.EAGER)
+@OneToOne(fetch = FetchType.EAGER)
 @JoinColumn(name = "usuario_id")
 private Usuario usuario;
 
