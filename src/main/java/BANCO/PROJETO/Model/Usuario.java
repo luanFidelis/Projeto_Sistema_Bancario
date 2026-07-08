@@ -22,12 +22,13 @@ public Usuario(){
 
 }
 
-public Usuario(String nome, String email, String cpf, Ativo ativo, TipoDeConta tipoDeconta) {
+public Usuario(String nome, String email, String cpf, Ativo ativo, TipoDeConta tipoDeconta, String numeroCelular  ) {
  this.nome = nome;
  this.email = email;
 this.cpf = cpf;
  this.ativo = ativo;
  this.tipoDeconta = tipoDeconta;
+ this.numeroCelular = numeroCelular;
 }
 
     @Id
@@ -48,6 +49,9 @@ this.cpf = cpf;
 
     @Enumerated(EnumType.STRING)
     private TipoDeConta tipoDeconta;
+
+    @Column(nullable = false, unique = true, length = 14)
+    private String numeroCelular;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Conta> conta;

@@ -30,6 +30,11 @@ public class UsuarioService {
         if (usuarioRepository.findByCpf(usuario.getCpf()).isPresent()) {
             throw new UsuarioExistenteException("Cpf ja registrado!");
         }
+        if(usuarioRepository.findByEmail(usuario.getEmail()).isPresent()){
+            throw new UsuarioExistenteException("Email ja registrado!");
+
+        }
+
 
         return Optional.of(usuarioRepository.save(usuario));
     }

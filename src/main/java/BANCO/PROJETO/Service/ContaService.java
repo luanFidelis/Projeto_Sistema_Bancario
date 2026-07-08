@@ -31,6 +31,8 @@ public class ContaService {
     @Transactional
     public Optional<Usuario> gerarChavePix(String cpf, UUID id, TipoDeChave tipoDeChave) {
 
+
+        String numeroChavePix = "Gerar Chave Pix";
         Optional<Usuario> usuarioOptional = usuarioRepository.findByCpf(cpf);
         if (usuarioOptional.isEmpty()) return Optional.empty();
 
@@ -51,9 +53,7 @@ public class ContaService {
             return Optional.empty();
         }
 
-        if (contaEncontrada.getChavePix().size() >= 4) {
-            return Optional.empty();
-        }
+
 
         for (int x = 0; x < contaEncontrada.getChavePix().size(); x++) {
             ChavePix chaveExistente = contaEncontrada.getChavePix().get(x);
@@ -64,7 +64,30 @@ public class ContaService {
             }
         }
 
-        ChavePix chavePix = new ChavePix(tipoDeChave, cpf);
+
+
+        if(tipoDeChave.equals(TipoDeChave.ALEATORIA)){
+
+            numeroChavePix = "CG" + System.currentTimeMillis();
+
+        }
+        else if(tipoDeChave.equals(TipoDeChave.CPF)){
+
+            numeroChavePix = usuario.getCpf();
+        }
+
+        else if(tipoDeChave.equals(TipoDeChave.CELULAR)){
+
+            numeroChavePix = usuario.getNumeroCelular();
+        }
+
+        else if(tipoDeChave.equals(TipoDeChave.EMAIL)){
+
+            numeroChavePix = usuario.getEmail();
+        }
+
+
+        ChavePix chavePix = new ChavePix(tipoDeChave, numeroChavePix);
         chavePix.setConta(contaEncontrada);
         chavePix.setSituacaoChave(true);
 
