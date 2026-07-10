@@ -21,7 +21,7 @@ public class ChavePix {
     public ChavePix( TipoDeChave tipoDeChave, String chavePix) {
         this.tipoDeChave = tipoDeChave;
         this.chavePix = chavePix;
-
+//
     }
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
