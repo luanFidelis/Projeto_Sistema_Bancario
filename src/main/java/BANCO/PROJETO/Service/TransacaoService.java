@@ -59,16 +59,11 @@ public class TransacaoService {
 
         boolean retorno = false;
         LocalDateTime horaTransacao = LocalDateTime.now();
-        switch (transacaoDto.tipoTransacao()) {
-            case PIX : retorno = fazerPix(contaQueVaiEnviar, contaQueVaiReceber, transacaoDto.valor());
-            break;
-            case CREDITO:
-            break;
-            case DEBITO:
-                break;
 
-            default: throw new AcaoNaoRealizada("Metodo pix não encontrado, entre em contato com o suporte");
-        }
+        retorno = fazerPix(contaQueVaiEnviar, contaQueVaiReceber, transacaoDto.valor());
+
+
+
 
         if(!retorno){
             throw new AcaoNaoRealizada("Ação nao realizada, entre em contado com o suporte");
@@ -89,8 +84,6 @@ public class TransacaoService {
         transacaoRepository.save(transacao);
 
         HistoricoMovimentacao historicoMovimentacao = new HistoricoMovimentacao(contaQueVaiEnviar.getNumeroConta(), contaQueVaiReceber.getNumeroConta(),horaTransacao, SituacaoPix.APROVADO, numeroGerado);
-
-
     }
 
     private boolean fazerPix(Conta contaOrigem, Conta contaDestino, BigDecimal valor) {

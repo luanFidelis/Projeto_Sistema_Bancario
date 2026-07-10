@@ -35,13 +35,9 @@ public class UsuarioService {
 
         }
 
-
         return Optional.of(usuarioRepository.save(usuario));
     }
 
-    public Optional<Usuario> buscarContaPorCpf(String cpf) {
-        return usuarioRepository.findByCpf(cpf);
-    }
 
 
 
