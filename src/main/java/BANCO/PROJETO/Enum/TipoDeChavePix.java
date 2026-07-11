@@ -1,6 +1,6 @@
 package BANCO.PROJETO.Enum;
 
-public enum TipoDeChave {
+public enum TipoDeChavePix {
     EMAIL,
     CELULAR,
     CPF,

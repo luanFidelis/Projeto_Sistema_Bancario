@@ -1,6 +1,7 @@
 package BANCO.PROJETO.Dto;
 
-import BANCO.PROJETO.Enum.TipoDeChave;
+
+import BANCO.PROJETO.Enum.TipoDeChavePix;
 import BANCO.PROJETO.Enum.TipoTransacao;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,13 +13,14 @@ public record TransacaoDto (
         @NotBlank
         String numeroContaOrigem,
         @NotBlank
-        TipoDeChave tipoDeChave,
-        @NotBlank
         String numeroContaDestino,
         @NotBlank
         TipoTransacao tipoTransacao,
         @NotNull
         BigDecimal valor
+
+
+
 
         ) {
 }

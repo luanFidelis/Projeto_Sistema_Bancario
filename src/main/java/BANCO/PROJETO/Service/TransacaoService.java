@@ -13,13 +13,16 @@ import BANCO.PROJETO.Model.HistoricoMovimentacao;
 import BANCO.PROJETO.Model.Transacao;
 import BANCO.PROJETO.Repository.ChavePixRepository;
 import BANCO.PROJETO.Repository.ContaRepository;
+import BANCO.PROJETO.Repository.HistoricoMovimentacaoRepository;
 import BANCO.PROJETO.Repository.TransacaoRepository;
 import jakarta.transaction.Transactional;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 
 @Service
@@ -28,75 +31,101 @@ public class TransacaoService {
     private final TransacaoRepository transacaoRepository;
     private final ContaRepository contaRepository;
     private final ChavePixRepository chavePixRepository;
+    private final HistoricoMovimentacaoRepository historicoMovimentacaoRepository;
 
     public TransacaoService(TransacaoRepository transacaoRepository,
                             ContaRepository contaRepository,
-                            ChavePixRepository chavePixRepository) {
+                            ChavePixRepository chavePixRepository,
+                            HistoricoMovimentacaoRepository historicoMovimentacaoRepository) {
 
         this.transacaoRepository = transacaoRepository;
         this.contaRepository = contaRepository;
         this.chavePixRepository = chavePixRepository;
+        this.historicoMovimentacaoRepository = historicoMovimentacaoRepository;
     }
 
+
+
+
     @Transactional
-    public void fazerTransacaoPix(TransacaoDto transacaoDto) {
+    public TransacaoDto fazerTransacao(TransacaoDto transacaoDto) {
+
+        String numeroGerado = gerarNumeroProcesso();
 
         Conta contaQueVaiEnviar = contaRepository.findByNumeroConta(transacaoDto.numeroContaOrigem())
                 .orElseThrow(() -> new ContaNaoEncontradaExcepiton("Conta Origem não encontrada"));
 
-
         Conta contaQueVaiReceber = contaRepository.findByNumeroConta(transacaoDto.numeroContaDestino())
                 .orElseThrow(() -> new ContaNaoEncontradaExcepiton("Conta Destino não encontrada"));
 
+        return switch (transacaoDto.tipoTransacao()) {
 
-        String numeroGerado = gerarNumeroProcesso();
+            case PIX -> fazerTransacaoPix(
+                    contaQueVaiEnviar,
+                    contaQueVaiReceber,
+                    transacaoDto.valor(),
+                    numeroGerado,
+                    transacaoDto.tipoTransacao()
+            );
 
-        if(contaQueVaiEnviar.getSaldo().compareTo(transacaoDto.valor()) < 0)
-            throw new SaldoInsuficienteException("Saldo insuficiente");
-
-        if(transacaoDto.valor().compareTo(BigDecimal.ZERO) <= 0)
-            throw new ValorInvalidoException("Valor insuficiente");
-
-        boolean retorno = false;
-        LocalDateTime horaTransacao = LocalDateTime.now();
-
-        retorno = fazerPix(contaQueVaiEnviar, contaQueVaiReceber, transacaoDto.valor());
-
-
-
-
-        if(!retorno){
-            throw new AcaoNaoRealizada("Ação nao realizada, entre em contado com o suporte");
-        }
-
-
-        Transacao transacao = new Transacao(
-                contaQueVaiEnviar.getUsuario().getCpf(),
-                contaQueVaiEnviar.getUsuario().getNome(),
-                contaQueVaiReceber.getUsuario().getCpf(),
-                contaQueVaiReceber.getUsuario().getNome(),
-                transacaoDto.valor(),
-                horaTransacao,
-                SituacaoPix.APROVADO,
-                transacaoDto.tipoTransacao()
-
-                );
-        transacaoRepository.save(transacao);
-
-        HistoricoMovimentacao historicoMovimentacao = new HistoricoMovimentacao(contaQueVaiEnviar.getNumeroConta(), contaQueVaiReceber.getNumeroConta(),horaTransacao, SituacaoPix.APROVADO, numeroGerado);
+            default -> throw new AcaoNaoRealizada("Não foi possível realizar a ação");
+        };
     }
 
-    private boolean fazerPix(Conta contaOrigem, Conta contaDestino, BigDecimal valor) {
+
+
+    protected TransacaoDto fazerTransacaoPix(Conta contaOrigem, Conta contaDestino, BigDecimal valor, String numeroGerado, TipoTransacao tipoTransacao) {
+
+
+        if (valor.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new ValorInvalidoException("Valor inválido");
+        }
+
+        if (contaOrigem.getSaldo().compareTo(valor) < 0) {
+            throw new AcaoNaoRealizada("Saldo insuficiente");
+        }
+
+        LocalDateTime horaTransacao = LocalDateTime.now();
 
         contaOrigem.setSaldo(contaOrigem.getSaldo().subtract(valor));
         contaDestino.setSaldo(contaDestino.getSaldo().add(valor));
 
-
         contaRepository.save(contaOrigem);
         contaRepository.save(contaDestino);
-        return true;
 
+        Transacao transacao = transacaoRepository.save(
+                new Transacao(
+                        contaOrigem.getUsuario().getCpf(),
+                        contaOrigem.getUsuario().getNome(),
+                        contaDestino.getUsuario().getCpf(),
+                        contaDestino.getUsuario().getNome(),
+                        valor,
+                        horaTransacao,
+                        SituacaoPix.APROVADO,
+                        TipoTransacao.PIX
+                )
+        );
+
+        HistoricoMovimentacao historico = new HistoricoMovimentacao(
+                contaOrigem.getNumeroConta(),
+                contaDestino.getNumeroConta(),
+                horaTransacao,
+                SituacaoPix.APROVADO,
+                numeroGerado
+        );
+
+        historicoMovimentacaoRepository.save(historico);
+
+        return new TransacaoDto(
+                contaOrigem.getNumeroConta(),
+                contaDestino.getNumeroConta(),
+                tipoTransacao,
+                valor
+
+
+        );
     }
+
 
     private String gerarNumeroProcesso() {
 
@@ -104,7 +133,7 @@ public class TransacaoService {
         do {
             numeroProcesso = "NP-" + System.currentTimeMillis();
 
-        } while (chavePixRepository.existsByNumeroProcesso(numeroProcesso));
+        } while (historicoMovimentacaoRepository.existsByNumeroProcesso(numeroProcesso));
 
 
         return numeroProcesso;

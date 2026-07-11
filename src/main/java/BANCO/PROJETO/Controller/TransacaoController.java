@@ -24,7 +24,7 @@ public class TransacaoController {
     public ResponseEntity<Transacao> TransacaoPix(@RequestBody TransacaoDto transacaoDto){
 
         try {
-            transacaoService.fazerTransacaoPix(transacaoDto);
+            transacaoService.fazerTransacao(transacaoDto);
 
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (RuntimeException e) {

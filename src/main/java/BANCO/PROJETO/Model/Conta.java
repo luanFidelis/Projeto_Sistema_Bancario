@@ -33,6 +33,10 @@ private BigDecimal saldo = BigDecimal.ZERO;
 @Enumerated(EnumType.STRING)
 private TipoDeConta tipoDeConta;
 
+private String senhaConta;
+
+private String senhaAutorizar;
+
 
 //mappedBy = "conta" serve para dizer quem é o dono das chaves, dentro de Chave pix foi adicionado Conta conta
 //cascade = CascadeType.All serve para dizer que tudo o que acontecer com a conta acontece com ChavePix
