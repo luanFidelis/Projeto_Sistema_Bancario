@@ -1,7 +1,7 @@
 package BANCO.PROJETO.Exception;
 
 import BANCO.PROJETO.Exception.Excepitons.*;
-import BANCO.PROJETO.Model.Usuario;
+import BANCO.PROJETO.Usuario.Entity.Usuario;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
