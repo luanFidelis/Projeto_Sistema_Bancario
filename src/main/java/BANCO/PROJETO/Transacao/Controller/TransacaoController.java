@@ -1,4 +1,4 @@
-package BANCO.PROJETO.Transacao;
+package BANCO.PROJETO.Transacao.Controller;
 
 import BANCO.PROJETO.Transacao.Dto.TransacaoDto;
 import BANCO.PROJETO.Transacao.Entity.Transacao;
