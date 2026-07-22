@@ -1,6 +1,6 @@
 package BANCO.PROJETO.Transacao.Entity;
 
-import BANCO.PROJETO.Transacao.TipoDeTransacao.Pix.Enum.SituacaoPix;
+import BANCO.PROJETO.Transacao.Pix.Enum.SituacaoPix;
 import BANCO.PROJETO.Transacao.TipoDeTransacao.Enum.TipoTransacao;
 import jakarta.persistence.*;
 import lombok.Getter;

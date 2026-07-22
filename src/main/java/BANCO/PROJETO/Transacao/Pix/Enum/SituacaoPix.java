@@ -1,4 +1,4 @@
-package BANCO.PROJETO.Transacao.TipoDeTransacao.Pix.Enum;
+package BANCO.PROJETO.Transacao.Pix.Enum;
 
 public enum SituacaoPix {
     APROVADO,

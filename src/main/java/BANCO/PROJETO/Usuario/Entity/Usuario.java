@@ -56,6 +56,9 @@ this.cpf = cpf;
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Conta> conta;
 
+    @Column
+    private Long score;
+
 
 
 

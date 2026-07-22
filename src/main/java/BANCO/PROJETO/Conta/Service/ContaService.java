@@ -3,10 +3,10 @@ package BANCO.PROJETO.Conta.Service;
 
 import BANCO.PROJETO.Conta.Entity.Conta;
 import BANCO.PROJETO.Conta.Repository.ContaRepository;
-import BANCO.PROJETO.Transacao.TipoDeTransacao.Pix.Enum.TipoDeChavePix;
-import BANCO.PROJETO.Transacao.TipoDeTransacao.Pix.Entity.ChavePix;
+import BANCO.PROJETO.Transacao.Pix.Enum.TipoDeChavePix;
+import BANCO.PROJETO.Transacao.Pix.Entity.ChavePix;
 import BANCO.PROJETO.Usuario.Entity.Usuario;
-import BANCO.PROJETO.Transacao.TipoDeTransacao.Pix.Repository.ChavePixRepository;
+import BANCO.PROJETO.Transacao.Pix.Repository.ChavePixRepository;
 import BANCO.PROJETO.Usuario.Repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;

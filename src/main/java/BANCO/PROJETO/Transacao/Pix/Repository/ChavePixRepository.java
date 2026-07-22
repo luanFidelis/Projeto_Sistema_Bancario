@@ -1,6 +1,6 @@
-package BANCO.PROJETO.Transacao.TipoDeTransacao.Pix.Repository;
+package BANCO.PROJETO.Transacao.Pix.Repository;
 
-import BANCO.PROJETO.Transacao.TipoDeTransacao.Pix.Entity.ChavePix;
+import BANCO.PROJETO.Transacao.Pix.Entity.ChavePix;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package BANCO.PROJETO.Transacao.TipoDeTransacao.Pix.Service;
+package BANCO.PROJETO.Transacao.Pix.Service;
 
 import BANCO.PROJETO.Conta.Entity.Conta;
 import BANCO.PROJETO.Conta.Repository.ContaRepository;
@@ -10,7 +10,7 @@ import BANCO.PROJETO.Transacao.Entity.Transacao;
 import BANCO.PROJETO.Transacao.Repository.HistoricoMovimentacaoRepository;
 import BANCO.PROJETO.Transacao.Repository.TransacaoRepository;
 import BANCO.PROJETO.Transacao.TipoDeTransacao.Enum.TipoTransacao;
-import BANCO.PROJETO.Transacao.TipoDeTransacao.Pix.Enum.SituacaoPix;
+import BANCO.PROJETO.Transacao.Pix.Enum.SituacaoPix;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

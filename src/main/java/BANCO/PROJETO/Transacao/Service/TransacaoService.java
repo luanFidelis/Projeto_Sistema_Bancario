@@ -9,7 +9,7 @@ import BANCO.PROJETO.Conta.Entity.Conta;
 import BANCO.PROJETO.Conta.Repository.ContaRepository;
 import BANCO.PROJETO.Transacao.Repository.HistoricoMovimentacaoRepository;
 
-import BANCO.PROJETO.Transacao.TipoDeTransacao.Pix.Service.TransacaopixService;
+import BANCO.PROJETO.Transacao.Pix.Service.TransacaopixService;
 import jakarta.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
