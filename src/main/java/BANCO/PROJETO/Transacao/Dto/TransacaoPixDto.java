@@ -1,13 +1,13 @@
 package BANCO.PROJETO.Transacao.Dto;
 
 
-import BANCO.PROJETO.Transacao.TipoDeTransacao.Enum.TipoTransacao;
+import BANCO.PROJETO.Transacao.Enum.TipoTransacao;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public record TransacaoDto (
+public record TransacaoPixDto(
 
         @NotBlank
         String numeroContaOrigem,

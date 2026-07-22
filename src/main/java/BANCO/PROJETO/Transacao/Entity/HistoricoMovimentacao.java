@@ -1,6 +1,6 @@
 package BANCO.PROJETO.Transacao.Entity;
 
-import BANCO.PROJETO.Transacao.Pix.Enum.SituacaoPix;
+import BANCO.PROJETO.Transacao.Enum.SituacaoTransacao;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -17,7 +17,7 @@ public class HistoricoMovimentacao {
     public HistoricoMovimentacao(String contaOrigem,
                                  String contaDestino,
                                  LocalDateTime dataMovimentacao,
-                                 SituacaoPix situacao,
+                                 SituacaoTransacao situacao,
                                  String numeroProcesso) {
 
         this.contaOrigem = contaOrigem;
@@ -42,7 +42,7 @@ public class HistoricoMovimentacao {
     LocalDateTime dataMovimentacao;
 
     @Column(nullable = false)
-    SituacaoPix situacao;
+    SituacaoTransacao situacao;
     @Column(nullable = false)
     String numeroProcesso;
 }

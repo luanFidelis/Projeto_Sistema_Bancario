@@ -3,6 +3,7 @@ package BANCO.PROJETO.Cartao.Service;
 import BANCO.PROJETO.Cartao.Entity.Cartao;
 import BANCO.PROJETO.Cartao.Repository.CartaoRepository;
 import BANCO.PROJETO.Exception.Excepitons.ContaNaoEncontradaExcepiton;
+import BANCO.PROJETO.Transacao.Enum.TipoTransacao;
 import BANCO.PROJETO.Usuario.Entity.Usuario;
 import BANCO.PROJETO.Usuario.Repository.UsuarioRepository;
 import jakarta.transaction.Transactional;

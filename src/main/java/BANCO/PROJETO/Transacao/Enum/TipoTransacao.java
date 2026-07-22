@@ -1,4 +1,4 @@
-package BANCO.PROJETO.Transacao.TipoDeTransacao.Enum;
+package BANCO.PROJETO.Transacao.Enum;
 
 public enum TipoTransacao {
     DEBITO,

@@ -1,6 +1,6 @@
 package BANCO.PROJETO.Transacao.Controller;
 
-import BANCO.PROJETO.Transacao.Dto.TransacaoDto;
+import BANCO.PROJETO.Transacao.Dto.TransacaoPixDto;
 import BANCO.PROJETO.Transacao.Entity.Transacao;
 import BANCO.PROJETO.Transacao.Service.TransacaoService;
 import org.springframework.http.HttpStatus;
@@ -21,10 +21,10 @@ public class TransacaoController {
     }
 
     @PostMapping
-    public ResponseEntity<Transacao> TransacaoPix(@RequestBody TransacaoDto transacaoDto){
+    public ResponseEntity<Transacao> TransacaoPix(@RequestBody TransacaoPixDto transacaoPixDto){
 
         try {
-            transacaoService.fazerTransacao(transacaoDto);
+            transacaoService.fazerTransacao(transacaoPixDto);
 
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (RuntimeException e) {

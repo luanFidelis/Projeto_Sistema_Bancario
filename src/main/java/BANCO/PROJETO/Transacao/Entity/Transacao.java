@@ -1,7 +1,7 @@
 package BANCO.PROJETO.Transacao.Entity;
 
-import BANCO.PROJETO.Transacao.Pix.Enum.SituacaoPix;
-import BANCO.PROJETO.Transacao.TipoDeTransacao.Enum.TipoTransacao;
+import BANCO.PROJETO.Transacao.Enum.SituacaoTransacao;
+import BANCO.PROJETO.Transacao.Enum.TipoTransacao;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,7 +26,7 @@ public class Transacao {
                      String nomeDestino,
                      BigDecimal valor,
                      LocalDateTime dataHora,
-                     SituacaoPix situacaoPix,
+                     SituacaoTransacao situacaoTransacao,
                      TipoTransacao tipoTransacao) {
 
 
@@ -36,7 +36,7 @@ public class Transacao {
         this.nomeDestino = nomeDestino;
         this.valor = valor;
         this.dataHora = dataHora;
-        this.situacaoPix = situacaoPix;
+        this.situacaoTransacao = situacaoTransacao;
         this.tipoTransacao = tipoTransacao; }
 
     @Id
@@ -58,7 +58,7 @@ public class Transacao {
     private String numeroContaDestino;
 
     @Enumerated(EnumType.STRING)
-    private SituacaoPix situacaoPix;
+    private SituacaoTransacao situacaoTransacao;
 
     @Column(nullable = false, length = 14)
    private String cpfOrigem;
